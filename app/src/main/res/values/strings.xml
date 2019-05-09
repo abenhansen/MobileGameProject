@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GameEngine19</string>
+    <string name="game_name">DroidAnoid</string>
+    <string name="game_carscroller">CarScroller</string>
+    <string name="game_invader">Galaxy Invasion</string>
+
+</resources>
