@@ -25,6 +25,7 @@ public class World {
     List<Enemy> enemyList = new ArrayList<>();
     int maxEnemies = 5* (Enemy.WIDTH+2); //the amount of enemies
     List<EnemyBeam> enemyBeamList = new ArrayList<>();
+    List<EnemyBeam> enemyBeamList2 = new ArrayList<>();
     float passedTime = 0;
     long startTime = System.currentTimeMillis();
     EnemyBoss enemyBoss = new EnemyBoss();
@@ -47,7 +48,8 @@ public class World {
         if (ship.x + Ship.WIDTH > MAX_X){
             ship.x = (int)MAX_X - Ship.WIDTH;
         }
-        collideEnemyBeam();
+        collideEnemyBeam(enemyBeamList);
+        collideEnemyBeam(enemyBeamList2);
         clickBeams(isTouch, deltaTime);
         collideBeamOnEnemy();
         collideBeamOnBoss();
@@ -73,8 +75,10 @@ public class World {
     }
     private void spawnEnemyBeams(float deltaTime){ ;
         passedTime += deltaTime;
+
 //        if ((passedTime-(int)passedTime) > 0.93f ) {
         if (passedTime >= 1 ) {
+
             for (int i = 0; i < enemyList.size(); i++) {
                 EnemyBeam enemyBeam = new EnemyBeam();
                 enemyBeam.x = enemyList.get(i).x+10;
@@ -94,18 +98,29 @@ public class World {
 
     private void spawnEnemyBossBeams(float deltaTime){
         passedTime += deltaTime;
+        Random rand = new Random();
+        int beamType = rand.nextInt(3);
         if (passedTime >= 1) {
             EnemyBeam enemyBeam = new EnemyBeam();
             enemyBeam.x = enemyBoss.x3;
             enemyBeam.y = enemyBoss.y3;
-            enemyBeamList.add(enemyBeam);
+            if (beamType==1){
+                enemyBeamList.add(enemyBeam);
+
+            }
+            if (beamType==2){
+                enemyBeam.WIDTH = 14;
+                enemyBeam.HEIGHT = 26;
+                enemyBeamList2.add(enemyBeam);
+
+            }
             passedTime -=1f;
         }
         EnemyBeam enemyBeam = null;
-//        for (int i=0; i<enemyBeamList.size(); i++) {
-//            enemyBeam = enemyBeamList.get(i);
-//            enemyBeam.y = enemyBeam.y + enemyBeam.vy * deltaTime;
-//        }
+        for (int i=0; i<enemyBeamList2.size(); i++) {
+            enemyBeam = enemyBeamList2.get(i);
+            enemyBeam.y = enemyBeam.y + enemyBeam.vy * deltaTime;
+        }
     }
 
     private void spawnEnemies() {
@@ -143,10 +158,10 @@ public class World {
     }
 
 
-    private void collideEnemyBeam() {
+    private void collideEnemyBeam(List enemyBeamList) {
         EnemyBeam enemyBeam = null;
         for (int j = 0; j<enemyBeamList.size(); j++) {
-                enemyBeam = enemyBeamList.get(j);
+                enemyBeam = (EnemyBeam) enemyBeamList.get(j);
                 if (collideRects(ship.x, ship.y, Ship.WIDTH, Ship.HEIGHT, enemyBeam.x, enemyBeam.y, enemyBeam.WIDTH, enemyBeam.HEIGHT
                  )) {
                     ship.lives = ship.lives-1;

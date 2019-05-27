@@ -20,11 +20,12 @@ public class WorldRenderer {
     Bitmap enemyMiddle;
     Bitmap enemyBottom;
     Bitmap enemyHP;
+    Bitmap bossBeam;
     Typeface font;
     GameEngine gameEngine;
     World world;
     int hpcounter;
-    Random rand;
+    Random rand  = new Random();
 
 
 
@@ -38,6 +39,7 @@ public class WorldRenderer {
         enemyMiddle = gameEngine.loadBitmap("InvadersAssets/enemybossMiddle.png");
         enemyBottom = gameEngine.loadBitmap("InvadersAssets/enemybossBottom.png");
         enemyBeamImage= gameEngine.loadBitmap("InvadersAssets/smallEnemybeam.png");
+        bossBeam= gameEngine.loadBitmap("InvadersAssets/enemybeam.png");
         enemyHP= gameEngine.loadBitmap("InvadersAssets/Enemyhp.png");
         font = gameEngine.loadFont("InvadersAssets/Adore64.ttf");
 
@@ -53,13 +55,22 @@ public class WorldRenderer {
         for (int i = 0; i < world.enemyList.size(); i++){
             gameEngine.drawBitmap(enemyImage, world.enemyList.get(i).x, world.enemyList.get(i).y);
         }
-
             for (int i = 0; i < world.enemyBeamList.size(); i++){
-//                rand.nextInt(2);
-                if(world.enemyBoss.hasSpawned==false) {
+                if(!world.enemyBoss.hasSpawned) {
                     gameEngine.drawBitmap(enemyBeamImage, (int) world.enemyBeamList.get(i).x, (int) world.enemyBeamList.get(i).y);
                 }
-            }
+                if(world.enemyBoss.hasSpawned) {
+                    gameEngine.drawBitmap(enemyBeamImage, (int) world.enemyBeamList.get(i).x, (int) world.enemyBeamList.get(i).y);
+
+//      gameEngine.drawBitmap(enemyBeamImage, (int) world.enemyBeamList.get(i).x, (int) world.enemyBeamList.get(i).y);
+
+                }}
+        for (int j = 0; j < world.enemyBeamList2.size(); j++) {
+//            world.enemyBeamList.get(j).WIDTH = 14;
+//            world.enemyBeamList.get(j).HEIGHT = 26;
+            gameEngine.drawBitmap(bossBeam, (int) world.enemyBeamList2.get(j).x, (int) world.enemyBeamList2.get(j).y);
+        }
+
         if(world.enemyList.size()==0){
             hpcounter = (256/world.enemyBoss.maxHP)*world.enemyBoss.lives;
             gameEngine.drawBitmap(enemyHP,160-(256/2),0,160-(256/2),0,hpcounter,32);
